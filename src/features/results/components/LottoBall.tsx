@@ -20,6 +20,17 @@ export function LottoBall({
 }
 
 export function BallRow({ combination }: { combination: string }) {
+  if (combination.includes("Stand by…") || combination.includes("*")) {
+    return (
+      <div className="flex items-center flex-wrap justify-center gap-3 mt-4">
+        <span className="text-sm text-muted-foreground">
+          {" "}
+          No results yet...
+        </span>
+      </div>
+    );
+  }
+
   const balls = combination.split("-").map((b) => b.trim());
   return (
     <div className="flex items-center flex-wrap justify-center gap-3 mt-4">
