@@ -1,5 +1,4 @@
-const ROOT_URL =
-  "https://server-production-2894.up.railway.app/api/v2/results/";
+const ROOT_URL = import.meta.env.VITE_API_URL;
 
 export const fetchResults = async (
   date: string,
