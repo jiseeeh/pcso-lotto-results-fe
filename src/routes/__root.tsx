@@ -32,7 +32,7 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
         content: "width=device-width, initial-scale=1",
       },
       {
-        title: "PCSO Lotto Results Scraper",
+        title: "Lotto Results · PCSO draws, daily",
       },
     ],
     links: [
@@ -52,7 +52,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
         <HeadContent />
       </head>
-      <body className="font-sans antialiased wrap-anywhere selection:bg-[rgba(79,184,178,0.24)]">
+      <body className="flex min-h-screen flex-col font-sans antialiased wrap-anywhere selection:bg-primary/20">
         <PostHogProvider>
           <TanStackQueryProvider>
             <Toaster

@@ -1,6 +1,10 @@
-import { Clock } from "lucide-react";
-import { GameCardShell } from "#/features/results/components/GameCardShell";
-import { BallRow } from "#/features/results/components/LottoBall";
+import { DrawNumbers } from "#/features/results/components/DrawNumbers";
+import {
+  FigureRow,
+  GameCardShell,
+  KeyFigure,
+  winnersLabel,
+} from "#/features/results/components/GameCardShell";
 import {
   isPrizeKey,
   MAJOR_DRAW_TIME,
@@ -15,44 +19,27 @@ export function MajorLottoCard({
   entry: GameEntry;
 }) {
   const prizeRows = Object.entries(entry).filter(([k]) => isPrizeKey(k));
+  const jackpotWinners = entry["Jackpot Winner (6 out of 6)"];
 
   return (
-    <GameCardShell name={name} entry={entry}>
-      <div className="text-sm text-muted-foreground flex items-center gap-2 mt-1">
-        <Clock size={16} />
-        Drawn at {MAJOR_DRAW_TIME}
-      </div>
-      <BallRow combination={entry["Winning Combination"]} />
-      <hr className="my-3" />
-      <p className="text-sm text-muted-foreground text-center">
-        Jackpot Prize:{" "}
-        <span className="font-bold text-(--lagoon)">
-          {entry["Jackpot Prize"]}
-        </span>
-      </p>
-      {entry["Jackpot Winner (6 out of 6)"] !== undefined && (
-        <p className="text-xs text-muted-foreground text-center mt-1">
-          Jackpot Winner(s):{" "}
-          <span className="font-semibold">
-            {entry["Jackpot Winner (6 out of 6)"]}
+    <GameCardShell name={name} entry={entry} drawTime={MAJOR_DRAW_TIME}>
+      <DrawNumbers combination={entry["Winning Combination"]} />
+
+      <div className="flex flex-wrap items-end justify-between gap-x-4 gap-y-1">
+        <KeyFigure label="Jackpot" value={entry["Jackpot Prize"]} />
+        {jackpotWinners !== undefined && (
+          <span className="pb-1 text-sm whitespace-nowrap text-foreground-secondary">
+            {winnersLabel(jackpotWinners)}
           </span>
-        </p>
-      )}
+        )}
+      </div>
+
       {prizeRows.length > 0 && (
-        <>
-          <hr className="my-3" />
-          <div className="space-y-1">
-            {prizeRows.map(([label, value]) => (
-              <div
-                key={label}
-                className="flex justify-between text-xs text-muted-foreground"
-              >
-                <span>{label}</span>
-                <span className="font-semibold text-foreground">{value}</span>
-              </div>
-            ))}
-          </div>
-        </>
+        <dl className="divide-y border-t">
+          {prizeRows.map(([label, value]) => (
+            <FigureRow key={label} label={label} value={value} />
+          ))}
+        </dl>
       )}
     </GameCardShell>
   );

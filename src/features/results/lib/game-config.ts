@@ -12,7 +12,7 @@ export const KNOWN_GAMES = [
 ] as const;
 
 export const GAME_FILTERS = [
-  { label: "All Games", value: "all" },
+  { label: "All games", value: "all" },
   { label: "6/58 Ultra Lotto", value: "6/58" },
   { label: "6/55 Grand Lotto", value: "6/55" },
   { label: "6/49 Super Lotto", value: "6/49" },

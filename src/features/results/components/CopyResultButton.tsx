@@ -36,17 +36,18 @@ export function CopyResultButton({
     <Button
       variant="ghost"
       size="icon-sm"
+      className={copied ? "bg-accent" : undefined}
       onClick={handleClick}
       aria-label={label}
       aria-pressed={copied}
       title={label}
     >
       {failed ? (
-        <X className="text-destructive" />
+        <X strokeWidth={1.5} className="text-destructive" />
       ) : copied ? (
-        <Check className="text-(--lagoon)" />
+        <Check strokeWidth={1.5} className="text-foreground" />
       ) : (
-        <Copy />
+        <Copy strokeWidth={1.5} className="text-muted-foreground" />
       )}
     </Button>
   );

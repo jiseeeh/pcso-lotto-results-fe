@@ -1,23 +1,23 @@
+import { baseGameName } from "#/features/results/lib/result-utils";
+
 export function SkeletonCard({ name }: { name: string }) {
   return (
-    <div className="rounded-xl border shadow-sm overflow-hidden animate-pulse">
-      <div className="h-10 bg-(--sand) px-4 flex items-center">
-        <span className="font-black text-sm opacity-40">{name}</span>
+    <div className="flex h-full flex-col rounded-xl border bg-card">
+      <div className="flex h-14 items-center border-b px-5">
+        <span className="text-[15px] font-medium text-muted-foreground">
+          {baseGameName(name)}
+        </span>
       </div>
-      <div className="p-4 space-y-3">
-        <div className="h-3 w-1/3 rounded bg-muted" />
-        <div className="flex gap-2 justify-center py-2">
+      <div className="flex flex-col gap-5 p-5 animate-pulse">
+        <div className="flex gap-2">
           {Array.from({ length: 6 }).map((_, i) => (
             // biome-ignore lint/suspicious/noArrayIndexKey: skeleton
-            <div key={i} className="w-12 h-12 rounded-3xl bg-muted" />
+            <div key={i} className="size-10 rounded-md bg-muted sm:size-12" />
           ))}
         </div>
-        <div className="h-3 w-1/2 mx-auto rounded bg-muted" />
-        <div className="h-px bg-muted" />
-        <div className="space-y-2">
-          <div className="h-3 rounded bg-muted" />
-          <div className="h-3 rounded bg-muted" />
-          <div className="h-3 w-3/4 rounded bg-muted" />
+        <div className="flex flex-col gap-2">
+          <div className="h-4 w-16 rounded bg-muted" />
+          <div className="h-7 w-48 rounded bg-muted" />
         </div>
       </div>
     </div>
