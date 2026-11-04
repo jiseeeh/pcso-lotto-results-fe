@@ -1,19 +1,31 @@
-import { RefreshCw, WifiOff } from "lucide-react";
+import { RefreshCw, Wifi, WifiOff } from "lucide-react";
 import { useEffect, useState } from "react";
 import { sileo } from "sileo";
 import { useResults } from "#/features/results/hooks/useResults";
 import { LOCALE, LOCALE_OPTIONS } from "#/lib/constants";
 import ThemeToggle from "./ThemeToggle";
 import { Button } from "./ui/button";
+import { TypographyH3 } from "./ui/h3";
 
 export default function Header() {
   const [isOnline, setIsOnline] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [displayDate, setDisplayDate] = useState("");
+  const [headerDate, setHeaderDate] = useState("");
   const { refetch } = useResults(displayDate, "all");
 
   useEffect(() => {
     setIsOnline(navigator.onLine);
+    setHeaderDate(
+      new Intl.DateTimeFormat(LOCALE, {
+        ...LOCALE_OPTIONS,
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      }).format(new Date()),
+    );
+
     setDisplayDate(
       new Intl.DateTimeFormat(LOCALE, {
         ...LOCALE_OPTIONS,
@@ -36,56 +48,50 @@ export default function Header() {
   }, []);
 
   return (
-    <header className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur-sm">
-      <div className="page-wrap flex h-14 items-center justify-between gap-4">
-        <p className="flex items-baseline gap-2">
-          <span className="text-base font-semibold">Lotto Results</span>
-          <span className="hidden text-sm text-muted-foreground sm:inline">
-            PCSO draws, daily
-          </span>
-        </p>
-        <div className="flex items-center gap-2">
-          {!isOnline && (
-            <span className="mr-2 flex items-center gap-2 text-sm text-muted-foreground">
-              <WifiOff size={16} strokeWidth={1.5} />
-              Offline
-            </span>
-          )}
-          <Button
-            size="icon-sm"
-            variant="ghost"
-            aria-label="Refresh results"
-            title="Refresh results"
-            disabled={isRefreshing}
-            onClick={async () => {
-              setIsRefreshing(true);
+    <header className="sticky top-0 z-50 bg-background p-5 border-b border-(--border-base) flex justify-between">
+      <section>
+        <TypographyH3>Lotto Results</TypographyH3>
+        <span>{headerDate}</span>
+      </section>
+      <section className="flex items-center gap-2">
+        {isOnline ? (
+          <Wifi className="text-(--lagoon)" size={18} />
+        ) : (
+          <WifiOff size={18} />
+        )}
+        <Button
+          size="icon"
+          variant="outline"
+          disabled={isRefreshing}
+          onClick={async () => {
+            setIsRefreshing((prev) => !prev);
 
-              const res = await refetch();
+            const res = await refetch();
 
-              setIsRefreshing(false);
-
-              if (res.error) {
-                sileo.error({
-                  title: "Couldn't refresh",
-                  description:
-                    "The results service didn't respond. Try again in a moment.",
-                });
-                return;
-              }
-
-              sileo.success({
-                title: "Results refreshed",
+            if (res.error) {
+              sileo.error({
+                title: "Refresh failed",
+                description: "An error occurred while refreshing the results.",
               });
-            }}
-          >
-            <RefreshCw
-              strokeWidth={1.5}
-              className={isRefreshing ? "animate-spin" : undefined}
-            />
-          </Button>
-          <ThemeToggle />
-        </div>
-      </div>
+              setIsRefreshing(false);
+              return;
+            }
+
+            setIsRefreshing(false);
+
+            sileo.success({
+              title: "Refreshed",
+              description: "The lotto results have been refreshed.",
+            });
+          }}
+        >
+          <RefreshCw
+            className={`transition-transform ${isRefreshing ? "animate-spin" : ""}`}
+            size={18}
+          />
+        </Button>
+        <ThemeToggle />
+      </section>
     </header>
   );
 }
