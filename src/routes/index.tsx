@@ -37,20 +37,10 @@ function App() {
     });
   }, [date]);
 
-  const weekday = useMemo(() => {
-    if (!date) return "";
-    return date.toLocaleDateString(LOCALE, {
-      ...LOCALE_OPTIONS,
-      weekday: "long",
-    });
-  }, [date]);
-
   const today = useMemo(() => new Date().toDateString(), []);
 
-  const { data, error, isLoading, filteredGames, missingGames } = useResults(
-    displayDate,
-    game,
-  );
+  const { data, error, isLoading, filteredGames, missingGames } =
+    useResults(displayDate, game);
 
   const { copied, clearAll } = useCopyBuffer();
 
@@ -60,7 +50,7 @@ function App() {
     next.setDate(date.getDate() - 1);
     setDate(next);
   };
-
+ 
   const handleNextDay = () => {
     if (!date) return;
     const next = new Date(date);
@@ -73,21 +63,33 @@ function App() {
   const visibleGames = filteredGames(game);
 
   return (
-    <main className="page-wrap flex flex-1 flex-col gap-5 pt-10 pb-16">
+    <main className="page-wrap px-4 pb-8 pt-14">
       <DateNav
         machineDate={machineDate}
         displayDate={displayDate}
-        weekday={weekday}
         isToday={date.toDateString() === today}
         onPrev={handlePrevDay}
         onNext={handleNextDay}
-        copiedCount={copied.length}
-        onClearCopied={clearAll}
       />
 
       <GameFilter activeGame={game} onChange={setGame} />
 
-      <section className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+      {copied.length > 0 && (
+        <p className="text-sm text-muted-foreground flex items-center gap-2">
+          <span>
+            {copied.length} {copied.length === 1 ? "result" : "results"} copied
+          </span>
+          <button
+            type="button"
+            onClick={clearAll}
+            className="underline underline-offset-2 hover:text-foreground"
+          >
+            Clear
+          </button>
+        </p>
+      )}
+
+      <section className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
         {visibleGames.map((name) => {
           if (isLoading) return <SkeletonCard key={name} name={name} />;
           if (error) return <FallbackCard key={name} name={name} />;
@@ -98,8 +100,8 @@ function App() {
       </section>
 
       {missingGames.length > 0 && (
-        <p className="text-sm text-muted-foreground">
-          No results for {missingGames.join(", ")} on this date
+        <p className="text-sm text-muted-foreground text-center mt-2">
+          No results for {missingGames.join(", ")} on this date.
         </p>
       )}
     </main>

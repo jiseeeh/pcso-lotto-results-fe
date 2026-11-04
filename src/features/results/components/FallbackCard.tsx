@@ -1,14 +1,14 @@
-import { CircleAlert } from "lucide-react";
+import { AlertCircle } from "lucide-react";
 
 import { GameCardShell } from "#/features/results/components/GameCardShell";
 
 export function FallbackCard({ name }: { name: string }) {
   return (
     <GameCardShell name={name}>
-      <p className="flex h-10 items-center gap-2 text-sm text-muted-foreground sm:h-12">
-        <CircleAlert size={16} strokeWidth={1.5} />
-        Couldn't load this result
-      </p>
+      <div className="flex flex-col items-center justify-center gap-2 py-8 text-muted-foreground">
+        <AlertCircle size={24} className="text-destructive" />
+        <p className="text-sm text-destructive">Failed to load results.</p>
+      </div>
     </GameCardShell>
   );
 }

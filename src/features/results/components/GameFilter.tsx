@@ -9,22 +9,17 @@ type GameFilterProps = {
 
 export function GameFilter({ activeGame, onChange }: GameFilterProps) {
   return (
-    <ScrollArea className="w-full whitespace-nowrap">
-      <div className="flex gap-2 pb-2">
-        {GAME_FILTERS.map(({ label, value }) => {
-          const active = activeGame === value;
-          return (
-            <Button
-              key={value}
-              size="sm"
-              variant={active ? "default" : "outline"}
-              aria-pressed={active}
-              onClick={() => onChange(value)}
-            >
-              {label}
-            </Button>
-          );
-        })}
+    <ScrollArea className="w-full my-4 rounded-md border whitespace-nowrap">
+      <div className="flex space-x-4 p-4">
+        {GAME_FILTERS.map(({ label, value }) => (
+          <Button
+            key={value}
+            variant={activeGame === value ? "default" : "outline"}
+            onClick={() => onChange(value)}
+          >
+            {label}
+          </Button>
+        ))}
       </div>
       <ScrollBar orientation="horizontal" />
     </ScrollArea>
